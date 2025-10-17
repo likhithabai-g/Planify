@@ -29,13 +29,11 @@ export default function App() {
     <div>
       <h1>Planify</h1>
       <p>Plan it.Do it.Done</p>
-
       <Taskform addTask = {addTask}/>
       <TaskList  tasks = {tasks}
       updateTask={updateTask}
       deleteTask={deleteTask}/>
-      <ProgressTracker task = {tasks}/>
-
+      <ProgressTracker tasks = {tasks}/>
       <button>Clear all tasks</button>
     </div>
   )
