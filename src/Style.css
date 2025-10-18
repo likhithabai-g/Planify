@@ -1,23 +1,313 @@
-h1 {
-    color:blueviolet;
-    text-align: center;
+
+* {
+  box-sizing: border-box;
+  transition: all 0.25s ease-in-out;
 }
-.progress-tracker {
-  margin: 20px 0;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #a5b4fc, #f9a8d4, #fef9c3, #bbf7d0);
+  background-size: 400% 400%;
+  animation: bgFlow 15s ease infinite;
+  color: #111;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* -------- APP CONTAINER -------- */
+.App {
+  max-width: 760px;
+  margin: 60px auto;
+  padding: 36px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(14px) saturate(180%);
+  border-radius: 26px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* -------- HEADER -------- */
+header {
   text-align: center;
+  margin-bottom: 32px;
+}
+
+header h1 {
+  font-size: 38px;
+  margin: 0;
+  font-weight: 800;
+  background: linear-gradient(90deg, #2563eb, #ec4899, #f59e0b, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hueRotate 10s linear infinite;
+  letter-spacing: -0.5px;
+}
+
+header p {
+  color: #555;
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* -------- INPUT AREA -------- */
+.task-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 28px 0;
+}
+
+#inp {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+#inp input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: transparent;
+  color: #111;
+  font-weight: 500;
+}
+
+#inp button {
+  background: linear-gradient(135deg, #2563eb, #22c55e, #f59e0b);
+  background-size: 300% 300%;
+  animation: hueRotate 8s linear infinite;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+#inp button:hover {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+/* -------- DROPDOWN -------- */
+#btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#btns select {
+  appearance: none;
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 2px solid #e5e7eb;
+  background: linear-gradient(135deg, #ffffff, #f3f4f6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  font-weight: 600;
+  color: #111;
+  font-size: 15px;
+  position: relative;
+  background-image: linear-gradient(45deg, #c7d2fe, #fbcfe8);
+  background-clip: padding-box;
+}
+
+#btns select:hover {
+  transform: scale(1.03);
+  border-color: #93c5fd;
+  box-shadow: 0 3px 10px rgba(147, 197, 253, 0.4);
+}
+
+/* -------- TASK LIST -------- */
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  animation: slideIn 0.4s ease;
+}
+
+/* -------- CATEGORY THEMES -------- */
+li.work {
+  border-color: #2563eb;
+  background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+}
+li.personal {
+  border-color: #ec4899;
+  background: linear-gradient(135deg, #fce7f3, #fdf2f8);
+}
+li.study {
+  border-color: #8b5cf6;
+  background: linear-gradient(135deg, #ede9fe, #f5f3ff);
+}
+li.urgent {
+  border-color: #dc2626;
+  background: linear-gradient(135deg, #fee2e2, #fef2f2);
+}
+li.medium {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #fef3c7, #fffbeb);
+}
+li.low {
+  border-color: #22c55e;
+  background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+}
+
+/* Hover & Completed States */
+.task-list li:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.task-list li.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
+/* -------- TASK BUTTONS -------- */
+.task-list button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #2563eb;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.task-list button:hover {
+  transform: scale(1.2);
+  color: #f59e0b;
+}
+
+/* -------- PROGRESS BAR -------- */
+.progress-tracker {
+  margin-top: 24px;
 }
 
 .progress-bar {
-  width: 100%;
-  height: 20px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: 999px;
   overflow: hidden;
-  margin-top: 10px;
 }
 
 .progress {
   height: 100%;
-  background-color: #4caf50; /* Green color for the progress */
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, #22c55e, #2563eb, #ec4899, #f59e0b);
+  background-size: 300% 300%;
+  animation: hueRotate 6s linear infinite;
+  border-radius: 999px;
+}
+
+/* -------- CLEAR BUTTON -------- */
+.clear-btn {
+  margin-top: 28px;
+  background: linear-gradient(135deg, #dc2626, #ef4444, #f97316);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:hover {
+  transform: scale(1.03);
+  filter: brightness(1.1);
+}
+
+/* -------- FLOATING ADD BUTTON -------- */
+.fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #ec4899, #f59e0b);
+  background-size: 400% 400%;
+  animation: hueRotate 12s linear infinite;
+  color: white;
+  font-size: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab:hover {
+  transform: rotate(45deg) scale(1.1);
+}
+
+/* -------- ANIMATIONS -------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hueRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes bgFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* -------- RESPONSIVE -------- */
+@media (max-width: 600px) {
+  .App {
+    margin: 20px;
+    padding: 22px;
+  }
+  header h1 {
+    font-size: 28px;
+  }
+  #inp {
+    flex-direction: column;
+  }
+  #inp button {
+    width: 100%;
+  }
+  .fab {
+    width: 54px;
+    height: 54px;
+    font-size: 24px;
+  }
 }
